@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}
+    数据更新
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+
+
+    </style>
+{% endblock %}
+
+{% block newcontent %}
+    <div>
+        <input type="date" id="start_time" />
+        <button type="button" class="btn" onclick="update()">数据更新</button>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var start = document.getElementById("start_time");
+        var date = new Date();
+        var month_t = date.getMonth().toString();
+        if (date.getMonth() + 1 < 10)
+            month_t = '0' + (date.getMonth() + 1);
+
+        var day_t = date.getDate().toString();
+        if (date.getDate() < 10)
+            day_t = '0' + (date.getDate() + 1)
+
+        var dateString = date.getFullYear() + "-" + (month_t) + "-" + day_t;
+        start.value = dateString;
+
+         function update(){
+                var time = document.getElementById("start_time").value;
+                console.log(time)
+                window.location.href = "{{ url_for('update.getdata') }}?time="+time
+            }
+
+
+    </script>
+{%- endblock scripts %}
+

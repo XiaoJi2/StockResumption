@@ -1,0 +1,285 @@
+{% extends 'base.html' %}
+{% block title %}
+    个股涨停
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .div-main{
+            width: 100%;
+            height: 82%;
+            position: absolute;
+        }
+
+		.quarter-div1{
+            width: 20%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div2{
+            width: 20%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div3{
+            width: 60%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div4{
+            width: 60%;
+            height: 50%;
+            float: left;
+            display: block;
+            overflow-y: scroll;
+        }
+
+		.quarter-div5{
+            width: 20%;
+            height: 50%;
+            float: left;
+            display: block;
+            overflow-y: scroll;
+        }
+
+		.quarter-div6{
+            width: 20%;
+            height: 50%;
+            float: left;
+            display: block;
+            overflow-y: scroll;
+        }
+
+        .blue{
+            background-color: #5BC0DE;
+        }
+        .green{
+            background-color: #5CB85C;
+        }
+        .orange{
+            background-color: #F0AD4E;
+        }
+        .yellow{
+            background-color: #FFC706;
+        }
+
+        .normal-pre-text {
+            font-family: inherit;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            font-size: 14px;
+            line-height: 22px;
+            color: #666;
+        }
+        .live-message-detail {
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .li-header {
+            font-size: 14px;
+            color: #ff3322;
+            line-height: 24px;
+            padding-right: 15px;
+            font-weight: 700;
+            word-wrap: break-word;
+        }
+
+    {#  table  #}
+         table {
+            /*设置相邻单元格的边框间的距离*/
+            border-spacing: 0;
+            /*表格设置合并边框模型*/
+            border-collapse: collapse;
+            text-align: center;
+            height: 100%;
+        }
+        /*关键设置 tbody出现滚动条*/
+        table tbody {
+            display: block;
+            overflow-y: scroll;
+            height: 100%;
+        }
+
+        table thead,
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        /*关键设置：滚动条默认宽度是16px 将thead的宽度减16px*/
+        table thead {
+            width: calc( 100% - 1em)
+        }
+
+        table thead th {
+            background: #ccc;
+        }
+    {#    #}
+    </style>
+{% endblock %}
+
+{% block newcontent %}
+    <div class="div-main">
+        <div class="quarter-div1">
+            <table>
+                <tr>
+                    <td colspan="4">
+                        <p>个股人气排名</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>编号</td> <td>股票名称</td> <td>变化</td> <td>涨幅</td>
+                    {% for info in gegurenqi %}
+                        <tr>
+                                <td >{{ loop.index }}</td>
+                                <td >{{ info[0] }}</td>
+                                <td >{{ info[1] }}</td>
+                                <td >{{ info[2] }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tr>
+            </table>
+		</div>
+        <div class="quarter-div2 ">
+             <table>
+                <tr>
+                    <td colspan="6">
+                        <p>板块人气排名</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>编号</td> <td>板块名称</td> <td>人气</td> <td>涨速</td> <td>主力净额</td> <td>个股</td> 
+                    {% for info in bankuairenqi %}
+                        <tr>
+                                <td >{{ loop.index }}</td>
+                                <td >{{ info[1] }}</td>
+                                <td >{{ info[2] }}</td>
+                                <td >{{ info[3] }}</td>
+                                <td >{{ info[4] }}</td>
+                                <td>
+                                    <button type="button" class="btn" value="{{ info[0] }}" onclick="GetGeGu()">查看</button>
+                                </td>
+                        </tr>
+                    {% endfor %}
+
+                </tr>
+            </table>
+		</div>
+        <div class="quarter-div3 ">
+             <table>
+                <tr>
+                    <td colspan="9">
+                        <p>板块个股排名</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>编号</td> <td>股票代码</td> <td>股票名称</td> <td>涨幅</td> <td>总成交</td> <td>主力</td> <td>主力净额</td> <td>连板</td> <td>板块</td>
+                    {% for info in bankuaigegu %}
+                        <tr>
+                                <td >{{ loop.index }}</td>
+                                <td >{{ info[0] }}</td>
+                                <td >{{ info[1] }}</td>
+                                <td >{{ info[2] }}</td>
+                                <td >{{ info[3] }}</td>
+                                <td >{{ info[4] }}</td>
+                                <td >{{ info[5] }}</td>
+                                <td >{{ info[6] }}</td>
+                                <td >{{ info[7] }}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tr>
+            </table>
+		</div>
+
+		<div class="quarter-div4">
+            <div>
+                <h1>新闻快讯</h1>
+            </div>
+            <div>
+                <ul>
+                    {% for new in news %}
+                        <div class="live-message-detail">
+                            <li>
+                                <header class="li-header">
+                                    {{ new.datatime }}&nbsp;{{ new.title }}
+                                </header>
+                                {% if new.summary %}
+                                    <pre class="normal-pre-text">
+                                    {{ new.summary }}
+                                    </pre>
+                                {% endif %}
+                            </li>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+
+		</div>
+        <div class="quarter-div5">
+            <div>
+                <h1>短线精灵</h1>
+            </div>
+            <div>
+                <ul>
+                    {% for data in duanxian %}
+                        <div class="live-message-detail">
+                            <li>
+                                <header class="li-header">
+                                    {{ data.time }}&nbsp;&nbsp;{{ data.stock }}&nbsp;&nbsp;{{ data.status }}
+                                </header>
+                                <pre class="normal-pre-text">
+                                    {{ data.content }}
+                                </pre>
+                            </li>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+		</div>
+		<div class="quarter-div6">
+            <div>
+                <h1>大盘直播</h1>
+            </div>
+            <div>
+                <ul>
+                    {% for zhibo in dapanzhibos %}
+                        <div class="live-message-detail">
+                            <li>
+                                <header class="li-header">
+                                    {{ zhibo.time }}&nbsp;{{ zhibo.comment }}
+                                </header>
+                                <pre class="normal-pre-text">
+                                    {% for stock in zhibo.stock %}
+                                        {{ stock[0] }}{{ stock[1] }}%
+                                    {% endfor %}
+                                </pre>
+                            </li>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+
+		</div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function GetGeGu(){
+            var mybtnElt = document.getElementById("btn");
+            alert(mybtnElt)
+        }
+    </script>
+{%- endblock scripts %}
+

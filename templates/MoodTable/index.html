@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}
+    市场情绪监控表
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        #container {
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        .article {
+            width: 1000px;
+            background-color: darkseagreen;
+            height: 100px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid gray;
+        }
+        /*表格样式*/
+        table {
+            width: 90%;
+            background: #ccc;
+            margin: 10px auto;
+            border-collapse: collapse;/*border-collapse:collapse合并内外边距(去除表格单元格默认的2个像素内外边距*/
+        }
+        th,td {
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th {
+            background: #eee;
+            font-weight: normal;
+        }
+        tr {
+            background: #fff;
+        }
+        tr:hover {
+            background: #cc0;
+        }
+        td a {
+            color: #06f;
+            text-decoration: none;
+        }
+        td a:hover {
+            color: #06f;
+            text-decoration: underline;
+        }
+
+    </style>
+{% endblock %}
+
+{% block newcontent %}
+    <div>
+        <table>
+            <tr>
+                <td colspan="14">
+                    <p>市场情绪监控表</p>
+                    <p>红色数字代表普涨，绿色数字代表普跌，蓝色代表空间板，灰色代表休市日）</p>
+                </td>
+            </tr>
+            <tr>
+                <td>编号</td> <td>日期</td> <td>红盘</td> <td>绿盘</td> <td>实际涨停</td> <td>跌停</td> <td>炸板</td> <td>连板</td> <td>2连板</td> <td>3连板</td> <td>3连板个股</td> <td>3连板以上</td> <td>3连板以上个股</td> <td>总金额</td>
+                {% for info in infos %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ info.rdatatime }}</td>
+                        {% if info.zhangdie == "跌" %}
+                            <td>{{ info.hongpan }}</td>
+                            <td style="background-color:#00FF00">{{ info.lvpan }}</td>
+                        {% elif info.zhangdie == "涨" %}
+                            <td style="background-color:#FF0000">{{ info.hongpan }}</td>
+                            <td>{{ info.lvpan }}</td>
+                        {% else %}
+                            <td>{{ info.hongpan }}</td>
+                            <td>{{ info.lvpan }}</td>
+                        {% endif %}
+
+                        <td>{{ info.realzhangting }}</td>
+                        <td>{{ info.dieting }}</td>
+                        <td>{{ info.zhaban }}</td>
+                        <td>{{ info.lianban }}</td>
+                        <td>{{ info.lianban2 }}</td>
+                        <td>{{ info.liangban3 }}</td>
+                        <td>{{ info.liangban3gegu }}</td>
+                        <td>{{ info.liangban3up }}</td>
+                        <td>{{ info.liangban3upgegu }}</td>
+                        <td>{{ info.Total }}</td>
+                    </tr>
+                {% endfor %}
+                
+            </tr>
+
+            <tr>
+
+            </tr>
+        </table>
+    </div>
+{% endblock %}

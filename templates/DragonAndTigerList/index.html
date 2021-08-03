@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}
+    市场情绪监控表
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        #container {
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        .article {
+            width: 1000px;
+            background-color: darkseagreen;
+            height: 100px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid gray;
+        }
+        /*表格样式*/
+        table {
+            width: 90%;
+            background: #ccc;
+            margin: 10px auto;
+            border-collapse: collapse;/*border-collapse:collapse合并内外边距(去除表格单元格默认的2个像素内外边距*/
+        }
+        th,td {
+            height: 25px;
+            line-height: 25px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th {
+            background: #eee;
+            font-weight: normal;
+        }
+        tr {
+            background: #fff;
+        }
+        tr:hover {
+            background: #cc0;
+        }
+        td a {
+            color: #06f;
+            text-decoration: none;
+        }
+        td a:hover {
+            color: #06f;
+            text-decoration: underline;
+        }
+
+        .tdclred{
+            color: red;
+        }
+        .tdclgreen{
+            color: green;
+        }
+
+    </style>
+{% endblock %}
+
+{% block newcontent %}
+    <div>
+        <input type="date" id="start_time" />
+        <button type="button" class="btn" onclick="update()">数据更新</button>
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td colspan="7">
+                    <p>龙虎榜</p>
+                </td>
+            </tr>
+            <tr>
+                <td>编号</td> <td>日期</td> <td>游资</td> <td>股票代码</td> <td>股票名称</td> <td>买入金额</td> <td>卖出金额</td>
+                {% for info in infos %}
+                    <tr>
+                        {% if  info.buy == None %}
+                            <td class="tdclgreen">{{ loop.index }}</td>
+                            <td class="tdclgreen">{{ info.rdatatime }}</td>
+
+                            <td class="tdclgreen">{{ info.yzname }}</td>
+                            <td class="tdclgreen">{{ info.stockcode }}</td>
+                            <td class="tdclgreen">{{ info.stockname }}</td>
+                            <td class="tdclgreen">0</td>
+                            <td class="tdclgreen">{{ info.sell }}</td>
+                        {% else %}
+                            <td class="tdclred">{{ loop.index }}</td>
+                            <td class="tdclred">{{ info.rdatatime }}</td>
+
+                            <td class="tdclred">{{ info.yzname }}</td>
+                            <td class="tdclred">{{ info.stockcode }}</td>
+                            <td class="tdclred">{{ info.stockname }}</td>
+                            <td class="tdclred">{{ info.buy }}</td>
+                            <td class="tdclred">0</td>
+                        {% endif %}
+
+                    </tr>
+                {% endfor %}
+
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var start = document.getElementById("start_time");
+        var date = new Date();
+        var month_t = date.getMonth().toString();
+        if (date.getMonth() + 1 < 10)
+            month_t = '0' + (date.getMonth() + 1);
+
+        var day_t = date.getDate().toString();
+        if (date.getDate() < 10)
+            day_t = '0' + (date.getDate() + 1)
+
+        var dateString = date.getFullYear() + "-" + (month_t) + "-" + day_t;
+        start.value = dateString;
+
+         function update(){
+                var time = document.getElementById("start_time").value;
+                console.log(time)
+                window.location.href = "{{ url_for('longhubang.getdata') }}?time="+time
+            }
+
+
+    </script>
+{%- endblock scripts %}

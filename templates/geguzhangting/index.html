@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% block title %}
+    个股涨停
+{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+
+
+        table {
+            /*设置相邻单元格的边框间的距离*/
+            border-spacing: 0;
+            /*表格设置合并边框模型*/
+            border-collapse: collapse;
+            text-align: center;
+            height: 100%;
+        }
+        /*关键设置 tbody出现滚动条*/
+        table tbody {
+            display: block;
+            overflow-y: scroll;
+            height: 100%;
+        }
+
+        table thead,
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        /*关键设置：滚动条默认宽度是16px 将thead的宽度减16px*/
+        table thead {
+            width: calc( 100% - 1em)
+        }
+
+        table thead th {
+            background: #ccc;
+        }
+
+        .div-main{
+            width: 100%;
+            height: 82%;
+            position: absolute;
+        }
+        .quarter-div{
+            width: 50%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div1{
+            width: 40%;
+            height: 100%;
+            float: left;
+        }
+
+		.quarter-div2{
+            width: 30%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div3{
+            width: 30%;
+            height: 50%;
+            float: left;
+        }
+
+		.quarter-div4{
+            width: 60%;
+            height: 50%;
+            float: left;
+        }
+        .blue{
+            background-color: #5BC0DE;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block newcontent %}
+    <div class="div-main ">
+        <div>
+        <input type="date" id="start_time" />
+        <button type="button" class="btn" onclick="update()">数据更新</button>
+        </div>
+        <div class="quarter-div1 blue">
+            <table border="1">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>股票名称</th>
+                    <th>板块</th>
+                    <th>首板时间</th>
+                    <th>尾板时间</th>
+                    <th>开板次数</th>
+                    <th>连板</th>
+                    <th>市值</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for info in infos %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ info.stockname }}</td>
+                        <td>{{ info.bankuai }}</td>
+
+                        <td> date('Y-m-d H:i:s','{{ info.shoubantime }}')</td>
+                        <td>{{ info.weibantime }}</td>
+                        <td>{{ info.kaibancount }}</td>
+                        <td>{{ info.lianban }}</td>
+                        <td>{{ info.shizhi }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+        <div class="quarter-div2">
+            <table border="1">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>出生年月</th>
+                    <th>手机号码</th>
+                    <th>单位</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>张三</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴</td>
+                </tr>
+                <tr>
+                    <td>李四</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴与四十大盗</td>
+                </tr>
+                <tr>
+                    <td>王五</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>腾讯科技</td>
+                </tr>
+                <tr>
+                    <td>孟想</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>浏阳河就业</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div class="quarter-div3">
+            <table border="1">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>出生年月</th>
+                    <th>手机号码</th>
+                    <th>单位</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>张三</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴</td>
+                </tr>
+                <tr>
+                    <td>李四</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴与四十大盗</td>
+                </tr>
+                <tr>
+                    <td>王五</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>腾讯科技</td>
+                </tr>
+                <tr>
+                    <td>孟想</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>浏阳河就业</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div class="quarter-div4">
+            <table border="1">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>出生年月</th>
+                    <th>手机号码</th>
+                    <th>单位</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>张三</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴</td>
+                </tr>
+                <tr>
+                    <td>李四</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>阿里巴巴与四十大盗</td>
+                </tr>
+                <tr>
+                    <td>王五</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>腾讯科技</td>
+                </tr>
+                <tr>
+                    <td>孟想</td>
+                    <td>18</td>
+                    <td>1990-9-9</td>
+                    <td>13682299090</td>
+                    <td>浏阳河就业</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        var start = document.getElementById("start_time");
+        var date = new Date();
+        var month_t = date.getMonth().toString();
+        if (date.getMonth() + 1 < 10)
+            month_t = '0' + (date.getMonth() + 1);
+
+        var day_t = date.getDate().toString();
+        if (date.getDate() < 10)
+            day_t = '0' + (date.getDate() + 1)
+
+        var dateString = date.getFullYear() + "-" + (month_t) + "-" + day_t;
+        start.value = dateString;
+
+         function update(){
+                var time = document.getElementById("start_time").value;
+                console.log(time)
+                window.location.href = "{{ url_for('geguzhangting.getdata') }}?time="+time
+            }
+    </script>
+{%- endblock scripts %}
+

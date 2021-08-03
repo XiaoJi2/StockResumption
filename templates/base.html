@@ -1,0 +1,116 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}首页{% endblock %}
+{% block styles %}
+    {{ super() }}
+    <style>
+        {#body {#}
+        {#    background-image: url("{{ url_for('static',filename='images/bg.jpg') }}");#}
+        {#}#}
+
+        #myfoot {
+            border-top: 1px solid darkgray;
+            font-size: 14px;
+            text-align: center;
+            color: lightgray;
+        }
+
+        .navbar {
+            height: 70px;
+            padding-top: 10px;
+        }
+
+        #bs-example-navbar-collapse-1 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .navbar-brand {
+            font-size: 25px;
+            font-weight: bold;
+        }
+            #show_time {
+        position: absolute;right: 10px;top: 10px;
+        text-align: center;
+        color: #f32;
+    }
+    </style>
+{% endblock %}
+
+{% block navbar %}
+    <div style="height: 80px;"></div>
+    <nav class="navbar navbar-inverse">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+{#            <div class="navbar-header">#}
+{#                <a class="navbar-brand" href="#">#}
+{#                    个人复盘#}
+{#                </a>#}
+{##}
+{#            </div>#}
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{{ url_for('moodtable.moodIndex') }}">市场情绪 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="{{  url_for('longhubang.longhubang') }}"> 龙虎榜 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="{{  url_for('geguzhangting.geguzhangting') }}">今日涨停 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="{{  url_for('panzhongshishi.panzhongshishi') }}">盘中实时 <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="{{ url_for('update.index') }}">数据更新</a></li>
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">11 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">程序人生</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">随笔</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">慢生活</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="nav navbar-nav" id="show_time"></div>
+{#                <form class="navbar-form navbar-left">#}
+{#                    <div class="form-group">#}
+{#                        <input type="text" class="form-control" placeholder="Search">#}
+{#                    </div>#}
+{#                    <button type="submit" class="btn btn-default">搜索</button>#}
+{#                </form>#}
+{#                <ul class="nav navbar-nav navbar-right">#}
+{#                    {% if user %}#}
+{#                        <li class="dropdown">#}
+{#                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"#}
+{#                               aria-haspopup="true" aria-expanded="false">欢迎！{{ user.username }}<span class="caret"></span></a>#}
+{#                            <ul class="dropdown-menu">#}
+{#                                <li><a href="#">用户中心</a></li>#}
+{#                                <li role="separator" class="divider"></li>#}
+{#                                <li><a href="{{ url_for('user.logout') }}">退出</a></li>#}
+{#                            </ul>#}
+{#                        </li>#}
+{#                    {% else %}#}
+{#                        <li><a href="{{ url_for('user.login') }}">登录</a></li>#}
+{#                        <li><a href="{{ url_for('user.register') }}">注册</a></li>#}
+{#                    {% endif %}#}
+{#                </ul>#}
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+{% endblock %}
+
+{% block content %}
+    {% block newcontent %}
+        <h1>Hello, Bootstrap</h1>
+    {% endblock %}
+{#    {% block footer %}#}
+{#        <p id="myfoot">备案无</p>#}
+{#    {% endblock %}#}
+{% endblock %}
+{% block scripts %}
+    {{ super() }}
+    <script>
+     setInterval("show_time.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
+    </script>
+{%- endblock scripts %}
+
+
+
