@@ -65,7 +65,6 @@ class PanZhongData():
         }
         my_spider = Spider("https://hq.kaipanla.com/w1/api/index.php")
         html_json = my_spider.getPostjson(post_data)
-        print(html_json)
         dict_date = html_json['list']
         data_list = []
         if dict_date:
@@ -89,8 +88,7 @@ class PanZhongData():
         my_spider = Spider(
             "https://hq.kaipanla.com/w1/api/index.php?Order=1&a=GetHotPHB&st=30&apiv=w25&Type=1&c=StockBidYiDong&PhoneOSNew=1&UserID=879026&DeviceID=4477a863-a14e-3284-900f-8a6e71e24349&Token=d993f4b77d9d16b9585a504e58795dbf&Index=0&")
         html_json = my_spider.getJson()
-        print(html_json)
-        print('-------------------------')
+
         dict_date = html_json['List']
         data_list = []
         if dict_date:
@@ -100,7 +98,6 @@ class PanZhongData():
                 change = list1[3]
                 increase = list1[2]
                 ggrq_list = [stock_name, change, increase]
-                print(ggrq_list)
                 data_list.append(ggrq_list)
             return data_list
         else:
@@ -125,26 +122,28 @@ class PanZhongData():
         else:
             return False
 
-    def bankuaigegu(self):
-        my_spider = Spider(
-            "https://hq.kaipanla.com/w1/api/index.php?Order=1&st=30&a=ZhiShuStockList_W8&c=ZhiShuRanking&PhoneOSNew=1&old=1&DeviceID=4477a863-a14e-3284-900f-8a6e71e24349&Token=d993f4b77d9d16b9585a504e58795dbf&Index=0&apiv=w25&Type=6&UserID=879026&PlateID=801001&")
+    def bankuaigegu(self, code=801001):
+        url = "https://hq.kaipanla.com/w1/api/index.php?Order=1&st=30&a=ZhiShuStockList_W8&c=ZhiShuRanking&PhoneOSNew=1&old=1&DeviceID=4477a863-a14e-3284-900f-8a6e71e24349&Token=d993f4b77d9d16b9585a504e58795dbf&Index=0&apiv=w25&Type=6&UserID=879026&PlateID=" + str(code) + "&"
+        my_spider = Spider(url)
         html_json = my_spider.getJson()
-        dict_date = html_json['list']
+        dict_data = html_json['list']
         data_list = []
-        if dict_date:
-            for list1 in dict_date:
+        if dict_data:
+            for list1 in dict_data:
                 gp_code = list1[0]
                 gp_name = list1[1]
                 gp_zhangfu = list1[6]
-                gp_zongchengjiao = list1[7]
+                gp_zongchengjiao = str_of_num(list1[7])
                 gp_zhuli = list1[24]
-                gp_zhulijinge = list1[13]
+                gp_zhulijinge = str_of_num(list1[13])
                 gp_lianban = list1[23]
                 gp_bankuai = list1[4]
                 bkgg_list = [gp_code, gp_name, gp_zhangfu, gp_zongchengjiao, gp_zhuli, gp_zhulijinge, gp_lianban,
                              gp_bankuai]
                 data_list.append(bkgg_list)
-            return data_list
+            bk_dict = {}
+            bk_dict['data'] = data_list
+            return bk_dict
         else:
             return False
 

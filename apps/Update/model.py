@@ -1,6 +1,7 @@
 from apps.Spiders.model import Spider
+from apps.Utils.model import str_of_num
 from exts import db
-import datetime
+import time, datetime
 
 
 
@@ -81,7 +82,7 @@ class ZhangTingListTable(db.Model):
 class GeGuZhangTing():
     def __init__(self):
         pass
-    def update(self, time):
+    def update(self, updata_time):
         # 涨停
         case = []
         myspider = Spider("https://flash-api.xuangubao.cn/api/pool/detail?pool_name=limit_up")
@@ -105,14 +106,18 @@ class GeGuZhangTing():
                 for bankuailist in bankuailists:
                     datatable.bankuai += bankuailist["plate_name"] + ','
                 # 首板时间
-                datatable.shoubantime = list["first_limit_up"]
+                time_array = time.localtime(list["first_limit_up"])
+                datatable.shoubantime = time.strftime("%Y-%m-%d %H:%M:%S", time_array)
+                # datatable.shoubantime = list["first_limit_up"]
                 # 尾板时间
-                datatable.weibantime = list["last_limit_up"]
+                time_array = time.localtime(list["last_limit_up"])
+                datatable.weibantime = time.strftime("%Y-%m-%d %H:%M:%S", time_array)
+                # datatable.weibantime = list["last_limit_up"]
                 # 开板次数
                 datatable.kaibancount = list["break_limit_up_times"]
                 # 连板
                 datatable.lianban = list["limit_up_days"]
-                datatable.shizhi = list["non_restricted_capital"]
+                datatable.shizhi = str_of_num(list["non_restricted_capital"])
                 datatable. huanshou = list["turnover_ratio"]
                 case.append(datatable)
             db.session.add_all(case)

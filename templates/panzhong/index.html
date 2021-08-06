@@ -166,7 +166,7 @@
                                 <td >{{ info[3] }}</td>
                                 <td >{{ info[4] }}</td>
                                 <td>
-                                    <button type="button" class="btn" value="{{ info[0] }}" onclick="GetGeGu()">查看</button>
+                                    <button type="button" class="btn" value="{{ info[0] }}" onclick="GetGeGu(this)">查看</button>
                                 </td>
                         </tr>
                     {% endfor %}
@@ -174,16 +174,16 @@
                 </tr>
             </table>
 		</div>
-        <div class="quarter-div3 ">
+        <div class="quarter-div3 " id="quarter-div3tr">
              <table>
                 <tr>
                     <td colspan="9">
                         <p>板块个股排名</p>
                     </td>
                 </tr>
-                <tr>
+                <tr >
                     <td>编号</td> <td>股票代码</td> <td>股票名称</td> <td>涨幅</td> <td>总成交</td> <td>主力</td> <td>主力净额</td> <td>连板</td> <td>板块</td>
-                    {% for info in bankuaigegu %}
+                    {% for info in bankuaigegu.data %}
                         <tr>
                                 <td >{{ loop.index }}</td>
                                 <td >{{ info[0] }}</td>
@@ -214,9 +214,7 @@
                                     {{ new.datatime }}&nbsp;{{ new.title }}
                                 </header>
                                 {% if new.summary %}
-                                    <pre class="normal-pre-text">
-                                    {{ new.summary }}
-                                    </pre>
+                                    <pre class="normal-pre-text">{{ new.summary }}</pre>
                                 {% endif %}
                             </li>
                         </div>
@@ -237,9 +235,7 @@
                                 <header class="li-header">
                                     {{ data.time }}&nbsp;&nbsp;{{ data.stock }}&nbsp;&nbsp;{{ data.status }}
                                 </header>
-                                <pre class="normal-pre-text">
-                                    {{ data.content }}
-                                </pre>
+                                <pre class="normal-pre-text">{{ data.content }}</pre>
                             </li>
                         </div>
                     {% endfor %}
@@ -258,11 +254,7 @@
                                 <header class="li-header">
                                     {{ zhibo.time }}&nbsp;{{ zhibo.comment }}
                                 </header>
-                                <pre class="normal-pre-text">
-                                    {% for stock in zhibo.stock %}
-                                        {{ stock[0] }}{{ stock[1] }}%
-                                    {% endfor %}
-                                </pre>
+                                <pre class="normal-pre-text">{% for stock in zhibo.stock %}{{ stock[0] }}{{ stock[1] }}%{% endfor %}</pre>
                             </li>
                         </div>
                     {% endfor %}
@@ -276,10 +268,34 @@
 {% block scripts %}
     {{ super() }}
     <script>
-        function GetGeGu(){
-            var mybtnElt = document.getElementById("btn");
-            alert(mybtnElt)
+        function GetGeGu(a){
+            var id= a.value;
+            var html = ""
+            $.ajax({
+                url:"{{ url_for('panzhongshishi.bankuaigegu') }}",
+                data:{id:id},
+                success:function(result){
+
+                    {#var html = " <td>编号</td> <td>股票代码</td> <td>股票名称</td> <td>涨幅</td> <td>总成交</td> <td>主力</td> <td>主力净额</td> <td>连板</td> <td>板块</td>{% for info in result.data %}<tr><td >{{ loop.index }}</td><td >{{ info[0] }}</td><td >{{ info[1] }}</td><td >{{ info[2] }}</td><td >{{ info[3] }}</td><td >{{ info[4] }}</td><td >{{ info[5] }}</td><td >{{ info[6] }}</td><td >{{ info[7] }}</td></tr>{% endfor %}"#}
+                    var html = "<table><tr><td colspan=\"9\"><p>板块个股排名</p></td></tr><tr > <td>编号</td> <td>股票代码</td> <td>股票名称</td> <td>涨幅</td> <td>总成交</td> <td>主力</td> <td>主力净额</td> <td>连板</td> <td>板块</td> "
+                    var resultlen = result.data.length
+                    for(var i = 0; i < resultlen; i++){
+						html += "<tr>";
+						html += "<td >"+(i+1)+"</td>";
+						var s = result.data[i];
+                        for(var j = 0; j < s.length; j++){
+                            html += "<td >"+s[j]+"</td>";
+                            console.log(s[j])
+                        }
+                        html += "</tr>";
+					}
+                    html += "</tr></table>"
+                    console.log(html)
+                    document.getElementById("quarter-div3tr").innerHTML = html;
+                    {#console.log(tr.next('td'))#}
+                }})
         }
+        setTimeout(function(){location.reload()},20000);
     </script>
 {%- endblock scripts %}
 
